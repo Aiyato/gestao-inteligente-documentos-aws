@@ -27,6 +27,8 @@ A arquitetura segue o modelo **pay-per-use**, evitando servidores provisionados 
 
 ## 🏗️ Arquitetura
 
+<img width="1302" height="620" alt="Captura de tela 2026-07-17 202227" src="https://github.com/user-attachments/assets/781b17c1-3d15-4cba-82d3-2e50717eb404" />
+
 ```text
                     ┌─────────────────┐
                     │     Cliente     │
