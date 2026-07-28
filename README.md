@@ -4,17 +4,17 @@ Arquitetura **serverless na AWS** para ingestão, armazenamento, recuperação e
 
 O projeto foi desenvolvido para o cenário de uma startup de IA que recebe aproximadamente **50.000 novos arquivos por mês** e precisa manter todo o histórico de documentos sem tornar os custos de armazenamento inviáveis.
 
-## 📌 Visão geral
+## Visão geral
 
 A solução utiliza duas camadas de armazenamento:
 
-- 🔥 **Camada quente:** Amazon S3 Standard durante os primeiros 12 meses, oferecendo acesso rápido aos documentos.
-- ❄️ **Camada fria:** Amazon S3 Glacier Deep Archive após 365 dias, reduzindo significativamente o custo de armazenamento.
-- 🔒 **Retenção histórica:** nenhum documento é excluído, preservando a base para futuros processos de treinamento e análise de IA.
+-  **Camada quente:** Amazon S3 Standard durante os primeiros 12 meses, oferecendo acesso rápido aos documentos.
+-  **Camada fria:** Amazon S3 Glacier Deep Archive após 365 dias, reduzindo significativamente o custo de armazenamento.
+-  **Retenção histórica:** nenhum documento é excluído, preservando a base para futuros processos de treinamento e análise de IA.
 
 A arquitetura segue o modelo **pay-per-use**, evitando servidores provisionados permanentemente.
 
-## 🎯 Objetivos
+##  Objetivos
 
 - Permitir upload de arquivos PDF por meio de uma API.
 - Validar tipo e tamanho dos arquivos antes do processamento.
@@ -25,49 +25,11 @@ A arquitetura segue o modelo **pay-per-use**, evitando servidores provisionados 
 - Garantir observabilidade por meio do CloudWatch.
 - Criar uma arquitetura escalável, segura e financeiramente sustentável.
 
-## 🏗️ Arquitetura
+##  Arquitetura
 
 <img width="1302" height="620" alt="Captura de tela 2026-07-17 202227" src="https://github.com/user-attachments/assets/781b17c1-3d15-4cba-82d3-2e50717eb404" />
 
-```text
-                    ┌─────────────────┐
-                    │     Cliente     │
-                    └────────┬────────┘
-                             │
-                             ▼
-                    ┌─────────────────┐
-                    │  API Gateway    │
-                    │   HTTP / API     │
-                    └────────┬────────┘
-                             │
-                             ▼
-                    ┌─────────────────┐
-                    │   AWS Lambda    │
-                    │ Lógica de negócio│
-                    └──────┬──────┬───┘
-                           │      │
-                  ┌────────┘      └───────────┐
-                  ▼                           ▼
-          ┌───────────────┐           ┌───────────────┐
-          │   Amazon S3   │           │  CloudWatch   │
-          │                │           │ Logs/Métricas │
-          │  S3 Standard  │           └───────────────┘
-          │      ↓         │
-          │  Lifecycle     │
-          │      ↓         │
-          │ Glacier Deep   │
-          │    Archive     │
-          └───────────────┘
-                  ▲
-                  │
-          ┌───────────────┐
-          │      IAM      │
-          │ Segurança e   │
-          │ permissões    │
-          └───────────────┘
-```
-
-## ☁️ Serviços AWS utilizados
+##  Serviços AWS utilizados
 
 ### Amazon API Gateway
 
@@ -120,7 +82,7 @@ Utilizado para:
 - Acompanhamento de desempenho.
 - Auditoria das operações críticas.
 
-## 🔄 S3 Lifecycle
+##  S3 Lifecycle
 
 A principal estratégia de otimização de custos é o uso do **S3 Lifecycle**.
 
@@ -145,7 +107,7 @@ Após **365 dias**, os objetos são automaticamente movidos para o **S3 Glacier 
 
 Nenhum arquivo é excluído, garantindo a retenção do histórico necessário para futuras aplicações de IA.
 
-## 🔐 Segurança
+##  Segurança
 
 A arquitetura considera os seguintes mecanismos:
 
@@ -169,7 +131,7 @@ usuario-123/documento.pdf
 
 Dessa forma, a aplicação pode restringir o acesso de cada usuário aos seus próprios objetos.
 
-## 📋 Requisitos funcionais
+##  Requisitos funcionais
 
 | ID | Requisito | Prioridade |
 |---|---|---|
@@ -184,7 +146,7 @@ Dessa forma, a aplicação pode restringir o acesso de cada usuário aos seus pr
 | RF09 | Manter todos os documentos sem exclusão automática | Alta |
 | RF10 | Permitir consulta de métricas e logs através do CloudWatch | Média |
 
-## ⚙️ Requisitos não funcionais
+##  Requisitos não funcionais
 
 ### Segurança
 
@@ -214,14 +176,14 @@ A solução foi analisada considerando os seis pilares do AWS Well-Architected F
 
 | Pilar | Aplicação |
 |---|---|
-| 🛠️ Operational Excellence | CloudWatch Logs e monitoramento |
-| 🔐 Security | IAM, criptografia e Block Public Access |
-| 🛡️ Reliability | S3 gerenciado e arquitetura escalável |
-| ⚡ Performance Efficiency | Serverless e auto scaling |
-| 💰 Cost Optimization | Pay-per-use e S3 Lifecycle |
-| 🌱 Sustainability | Uso eficiente dos recursos |
+|  Operational Excellence | CloudWatch Logs e monitoramento |
+|  Security | IAM, criptografia e Block Public Access |
+|  Reliability | S3 gerenciado e arquitetura escalável |
+|  Performance Efficiency | Serverless e auto scaling |
+|  Cost Optimization | Pay-per-use e S3 Lifecycle |
+|  Sustainability | Uso eficiente dos recursos |
 
-## 💰 Estimativa de custos
+##  Estimativa de custos
 
 As estimativas foram baseadas nas seguintes premissas:
 
@@ -244,9 +206,9 @@ As estimativas foram baseadas nas seguintes premissas:
 | Amazon CloudWatch | US$ 3,75 |
 | **Total estimado** | **US$ 22,41/mês** |
 
-> ⚠️ Os valores são estimativas e podem variar de acordo com a região AWS, volume de utilização, comportamento dos usuários e alterações na tabela de preços.
+>  Os valores são estimativas e podem variar de acordo com a região AWS, volume de utilização, comportamento dos usuários e alterações na tabela de preços.
 
-## 📊 Análise de custos
+##  Análise de custos
 
 O armazenamento representa o principal componente do custo da arquitetura.
 
@@ -254,7 +216,7 @@ A estratégia de mover documentos com mais de 365 dias para o Glacier Deep Archi
 
 O processamento com API Gateway e Lambda permanece praticamente gratuito nesse volume de utilização, reforçando a vantagem do modelo serverless para uma aplicação com crescimento variável.
 
-## 📈 Escalabilidade
+##  Escalabilidade
 
 O cenário considera aproximadamente:
 
@@ -268,19 +230,19 @@ O cenário considera aproximadamente:
 
 A arquitetura foi projetada para acompanhar esse crescimento sem exigir o provisionamento manual de servidores.
 
-## 🚀 Benefícios da solução
+##  Benefícios da solução
 
-- ✅ Arquitetura 100% serverless.
-- ✅ Escalabilidade automática.
-- ✅ Pagamento conforme utilização.
-- ✅ Armazenamento altamente durável.
-- ✅ Retenção histórica sem exclusão dos documentos.
-- ✅ Otimização automática de custos.
-- ✅ Controle granular de acesso.
-- ✅ Monitoramento e auditoria.
-- ✅ Redução da necessidade de gerenciamento de infraestrutura.
+-  Arquitetura 100% serverless.
+-  Escalabilidade automática.
+-  Pagamento conforme utilização.
+-  Armazenamento altamente durável.
+-  Retenção histórica sem exclusão dos documentos.
+-  Otimização automática de custos.
+-  Controle granular de acesso.
+-  Monitoramento e auditoria.
+-  Redução da necessidade de gerenciamento de infraestrutura.
 
-## 📁 Estrutura conceitual do armazenamento
+##  Estrutura conceitual do armazenamento
 
 ```text
 S3 Bucket
@@ -297,19 +259,19 @@ S3 Bucket
     └── documento-005.pdf
 ```
 
-## 🧰 Tecnologias
+##  Tecnologias
 
-- ☁️ Amazon Web Services (AWS)
-- 🪣 Amazon S3
-- ⚡ AWS Lambda
-- 🌐 Amazon API Gateway
-- 🔐 AWS IAM
-- 📊 Amazon CloudWatch
-- ♻️ S3 Lifecycle
-- ❄️ S3 Glacier Deep Archive
-- 🏗️ Serverless Architecture
+-  Amazon Web Services (AWS)
+-  Amazon S3
+-  AWS Lambda
+-  Amazon API Gateway
+-  AWS IAM
+-  Amazon CloudWatch
+-  S3 Lifecycle
+-  S3 Glacier Deep Archive
+-  Serverless Architecture
 
-## 🎓 Objetivo do projeto
+##  Objetivo do projeto
 
 Este projeto foi desenvolvido como um **case de arquitetura em Cloud Computing**, com foco na criação de uma solução AWS escalável, segura e otimizada para custos.
 
@@ -326,7 +288,7 @@ O projeto demonstra conhecimentos em:
 - Segurança em Cloud
 - AWS Well-Architected Framework
 
-## 👥 Autores
+##  Autores
 
 - Andrea Alvares Duran
 - **Brenan Ulisses Araújo**
@@ -337,7 +299,7 @@ O projeto demonstra conhecimentos em:
 
 ---
 
-## 📄 Documentação completa
+##  Documentação completa
 
 Para consultar a documentação completa do projeto, acesse:
 
