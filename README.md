@@ -335,4 +335,10 @@ O projeto demonstra conhecimentos em:
 
 ---
 
+## 📄 Documentação completa
+
+Para consultar a documentação completa do projeto, acesse:
+
+👉 [Visualizar documentação completa (PDF)](./ProjetoCloudFinal.pdf)
+
 ⭐ **Projeto desenvolvido com foco em Cloud Computing, AWS e arquitetura Serverless.**
